@@ -1,24 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-import './transactions.dart';
+import 'package:intl/intl.dart';
+import '../models/transactions.dart';
 
 class TransactionCard extends StatelessWidget {
-  final List<Transactions> transactions = [
-    Transactions(
-      id: 1,
-      bill: 75.4,
-      title: "Dinner",
-      date: DateTime.now(),
-    ),
-    Transactions(
-      id: 2,
-      bill: 300,
-      title: 'Chicken Popcorn',
-      date: DateTime.utc(2022, 1, 30),
-    )
-  ];
+  final List<Transactions> transactions;
+  TransactionCard({required this.transactions});
 
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: transactions.map((transaction) {
@@ -40,7 +29,7 @@ class TransactionCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    '\$${transaction.bill}/-',
+                    '\$${transaction.bill.toStringAsFixed(2)}/-',
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,

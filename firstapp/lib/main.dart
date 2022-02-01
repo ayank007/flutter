@@ -1,29 +1,85 @@
-import 'package:firstapp/addtransaction.dart';
-import 'package:firstapp/transactionCard.dart';
-import 'package:firstapp/transactionchart.dart';
+import 'package:firstapp/widgets/transactionchart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-import 'transactions.dart';
+import 'package:firstapp/widgets/addtransaction.dart';
+import 'package:firstapp/widgets/transactionCard.dart';
+import '../models/transactions.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final List<Transactions> _transactions = [
+    Transactions(
+      id: 1,
+      bill: 75.4,
+      title: "Dinner",
+      date: DateTime.now(),
+    ),
+    Transactions(
+      id: 2,
+      bill: 300,
+      title: 'Chicken Popcorn',
+      date: DateTime.utc(2022, 1, 30),
+    )
+  ];
+
+  void addingTransaction(Transactions transaction) {
+    setState(() {
+      _transactions.add(transaction);
+    });
+  }
+
+  void _startAddNewTransction(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        builder: (_) {
+          return GestureDetector(
+            onTap: () {},
+            child: AddTransaction(
+              addingTransaction: addingTransaction,
+              transactionLength: _transactions.length,
+            ),
+            behavior: HitTestBehavior.opaque,
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'My Expense App',
+      theme: ThemeData(
+        primarySwatch: Colors.pink,
+        primaryColor: Colors.green.shade300,
+        accentColor: Colors.greenAccent.shade400,
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: Text("My Expences"),
+          backgroundColor: Theme.of(context).primaryColorDark,
         ),
-        body: Column(
-          children: <Widget>[
-            TransactionChart(),
-            AddTransaction(),
-            TransactionCard(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              TransactionChart(),
+              TransactionCard(
+                transactions: _transactions,
+              ),
+            ],
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Builder(
+          builder: (context1) => FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () => _startAddNewTransction(context1),
+          ),
         ),
       ),
     );
