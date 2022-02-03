@@ -14,20 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final List<Transactions> _transactions = [
-    Transactions(
-      id: 1,
-      bill: 75.4,
-      title: "Dinner",
-      date: DateTime.now(),
-    ),
-    Transactions(
-      id: 2,
-      bill: 300,
-      title: 'Chicken Popcorn',
-      date: DateTime.utc(2022, 1, 30),
-    )
-  ];
+  final List<Transactions> _transactions = [];
 
   void addingTransaction(Transactions transaction) {
     setState(() {
@@ -50,6 +37,16 @@ class _MyAppState extends State<MyApp> {
         });
   }
 
+  List<Transactions> get _recentTransction {
+    return _transactions.where((element) {
+      return element.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -67,7 +64,9 @@ class _MyAppState extends State<MyApp> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              TransactionChart(),
+              TransactionChart(
+                recentTransactions: _recentTransction,
+              ),
               TransactionCard(
                 transactions: _transactions,
               ),
