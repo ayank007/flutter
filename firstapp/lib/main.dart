@@ -8,12 +8,33 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Personal Expenses',
+      home: MyHomePage(),
+      theme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: Colors.amber,
+          primarySwatch: Colors.green,
+          textTheme: TextTheme(
+            headline1: TextStyle(
+              fontSize: 50,
+              color: Colors.green.shade200,
+              fontWeight: FontWeight.bold,
+            ),
+          )),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   final List<Transactions> _transactions = [];
 
   void addingTransaction(Transactions transaction) {
@@ -49,36 +70,33 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Expense App',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-        primaryColor: Colors.green.shade300,
-        accentColor: Colors.greenAccent.shade400,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "My Expences",
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        backgroundColor: Theme.of(context).primaryColorDark,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("My Expences"),
-          backgroundColor: Theme.of(context).primaryColorDark,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            TransactionChart(
+              recentTransactions: _recentTransction,
+            ),
+            TransactionCard(
+              transactions: _transactions,
+            ),
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              TransactionChart(
-                recentTransactions: _recentTransction,
-              ),
-              TransactionCard(
-                transactions: _transactions,
-              ),
-            ],
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Builder(
-          builder: (context1) => FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () => _startAddNewTransction(context1),
-          ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Builder(
+        builder: (context1) => FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => _startAddNewTransction(context1),
         ),
       ),
     );
