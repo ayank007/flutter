@@ -5,7 +5,11 @@ import '../models/transactions.dart';
 
 class TransactionCard extends StatelessWidget {
   final List<Transactions> transactions;
-  TransactionCard({required this.transactions});
+  final Function deleteATransaction;
+  TransactionCard({
+    required this.transactions,
+    required this.deleteATransaction,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,48 +34,63 @@ class TransactionCard extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(15),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 15),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.deepPurple.shade700,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          '\$${transaction.bill.toStringAsFixed(2)}/-',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.purple.shade700,
-                          ),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            transaction.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 15,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(right: 15),
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
                             ),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            DateFormat.yMMMd().format(transaction.date),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              fontSize: 12,
-                              color: Colors.black45,
+                            child: Text(
+                              '\$${transaction.bill.toStringAsFixed(2)}/-',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                transaction.title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 15,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                DateFormat.yMMMd().format(transaction.date),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 12,
+                                  color: Color.fromARGB(255, 13, 255, 235),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
-                      )
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 3,
+                          horizontal: 7,
+                        ),
+                        child: IconButton(
+                          onPressed: () => deleteATransaction(transaction.id),
+                          icon: Icon(Icons.delete_rounded),
+                        ),
+                      ),
                     ],
                   ),
                 ),

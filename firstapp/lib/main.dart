@@ -2,9 +2,15 @@ import 'package:firstapp/widgets/transactionchart.dart';
 import 'package:flutter/material.dart';
 import 'package:firstapp/widgets/addtransaction.dart';
 import 'package:firstapp/widgets/transactionCard.dart';
+import 'package:flutter/services.dart';
 import '../models/transactions.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MyApp());
 }
 
@@ -68,6 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
+  void _deleteTransaction(int transaction) {
+    setState(() {
+      _transactions.removeWhere((element) => element.id == transaction);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             TransactionCard(
               transactions: _transactions,
+              deleteATransaction: _deleteTransaction,
             ),
           ],
         ),

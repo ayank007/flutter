@@ -18,12 +18,21 @@ class _AddTransactionState extends State<AddTransaction> {
 
   final _amountController = TextEditingController();
 
-  DateTime? _selectedDate;
+  DateTime _selectedDate = DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
 
   void submitTransaction() {
+    if (_amountController.text.isEmpty) {
+      return;
+    }
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
-    if (enteredAmount <= 0 || enteredTitle.isEmpty) {
+    if (enteredAmount <= 0 ||
+        enteredTitle.isEmpty ||
+        _selectedDate == null ||
+        _selectedDate ==
+            DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day + 1)) {
       return;
     }
     widget.addingTransaction(
@@ -31,7 +40,7 @@ class _AddTransactionState extends State<AddTransaction> {
         id: widget.transactionLength + 1,
         bill: enteredAmount,
         title: enteredTitle,
-        date: DateTime.now(),
+        date: _selectedDate,
       ),
     );
     Navigator.of(context).pop();
@@ -44,7 +53,10 @@ class _AddTransactionState extends State<AddTransaction> {
       firstDate: DateTime(2022),
       lastDate: DateTime.now(),
     ).then((value) {
-      if (value == null) {
+      if (value == null ||
+          value ==
+              DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day + 1)) {
         return;
       }
       setState(() {
@@ -63,7 +75,7 @@ class _AddTransactionState extends State<AddTransaction> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(labelText: 'Enter Bill Title'),
-              style: TextStyle(color: Colors.purple),
+              style: TextStyle(color: Colors.white),
               controller: _titleController,
             ),
             TextField(
@@ -76,9 +88,11 @@ class _AddTransactionState extends State<AddTransaction> {
               child: Row(
                 children: [
                   Text(
-                    _selectedDate == null
+                    _selectedDate ==
+                            DateTime(DateTime.now().year, DateTime.now().month,
+                                DateTime.now().day + 1)
                         ? 'No Date Choosen'
-                        : DateFormat.yMd().format(DateTime.now()),
+                        : DateFormat.yMd().format(_selectedDate),
                   ),
                   TextButton(
                     onPressed: _pickADate,

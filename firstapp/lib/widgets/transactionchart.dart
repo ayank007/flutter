@@ -54,6 +54,7 @@ class TransactionChart extends StatelessWidget {
                     Container(
                       height: 100,
                       margin: EdgeInsets.symmetric(vertical: 10),
+                      alignment: Alignment.bottomCenter,
                       width: 20,
                       decoration: BoxDecoration(
                         border: Border.all(width: 1, color: Colors.black12),
@@ -74,7 +75,10 @@ class TransactionChart extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
                           ),
                         ),
                       ),
